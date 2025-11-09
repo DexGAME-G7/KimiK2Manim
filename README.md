@@ -2,6 +2,10 @@
 
 <div align="center">
 
+<a href="https://github.com/HarleyCoops/KimiK2Manim/stargazers">
+  <img alt="GitHub stars" src="https://img.shields.io/github/stars/HarleyCoops/KimiK2Manim?style=for-the-badge&logo=github&label=Star&color=gold">
+</a>
+
 ![Rhombicosidodecahedron Animation](media/videos/render_rhombicosidodecahedron/480p15/partial_movie_files/ArtisticRhombicosidodecahedron/rhombicosidodecahedron_preview.gif)
 
 *Rhombicosidodecahedron with 62 faces, golden ratio geometry, and dynamic multi-axis rotation*
