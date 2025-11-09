@@ -449,6 +449,58 @@ manim -pql manim_scenes/epic_rhombicosidodecahedron.py EpicRhombicosidodecahedro
 manim -pqh manim_scenes/epic_rhombicosidodecahedron.py EpicRhombicosidodecahedron
 ```
 
+### Harmonic Division Theorem Animation
+
+<div align="center">
+
+![Harmonic Theorem Animation](media/videos/harmonic_theorem/480p15/harmonic_theorem_preview.gif)
+
+*45-second demonstration of the Harmonic Division Theorem with step-by-step LaTeX equations*
+
+</div>
+
+The Harmonic Division Theorem animation demonstrates a fundamental concept in projective geometry:
+
+**Mathematical Concept**: Points A, C, D, B are in harmonic division if their cross-ratio equals -1:
+```
+(A,B;C,D) = (AC·BD)/(BC·AD) = -1
+```
+
+#### Animation Structure (45 seconds)
+
+The animation ([manim_scenes/harmonic_theorem.py](manim_scenes/harmonic_theorem.py)) presents the theorem in five acts:
+
+1. **Introduction (0-5s)**: Title and geometric setup
+2. **Construction (5-15s)**: Four collinear points with harmonic division property
+3. **Cross-Ratio (15-28s)**: Step-by-step calculation with color-coded segments
+4. **Visual Proof (28-40s)**: Circle construction showing harmonic conjugates
+5. **Conclusion (40-45s)**: Final boxed theorem
+
+#### Visual Design Features
+
+- **Color-coded points**: A (BLUE), C (GOLD), D (RED), B (GREEN)
+- **Glowing halos** around points for emphasis
+- **Sequential LaTeX equations** revealed step-by-step
+- **Segment highlighting** showing AC·BD and BC·AD relationships
+- **Geometric circle** demonstrating pole-polar duality
+- **Dark gradient background** for professional aesthetic
+
+#### Rendering the Animation
+
+```bash
+# Preview quality
+manim -pql manim_scenes/harmonic_theorem.py HarmonicDivisionTheorem
+
+# High quality render
+manim -pqh manim_scenes/harmonic_theorem.py HarmonicDivisionTheorem
+```
+
+The animation was generated using the KimiK2Manim enrichment pipeline, which:
+1. Explored prerequisites (cross-ratio, collinear points, harmonic conjugates)
+2. Enriched with LaTeX equations and definitions
+3. Designed visual specifications (colors, animations, timing)
+4. Composed a narrative prompt with exact 45-second timing breakdown
+
 See [manim_scenes/README.md](manim_scenes/README.md) for more rendering examples and all available scenes.
 
 This demonstrates how KimiK2Manim can be used to generate complex mathematical visualizations with artistic flair!
