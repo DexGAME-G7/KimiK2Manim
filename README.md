@@ -1,5 +1,7 @@
 # KimiK2Manim
 
+<iframe style="width:100%;height:auto;min-width:600px;min-height:400px;" src="https://www.star-history.com/embed?repo=HarleyCoops/KimiK2Manim&type=date&legend=top-left" frameBorder="0"></iframe>
+
 <div align="center">
 
 <a href="https://github.com/HarleyCoops/KimiK2Manim/stargazers">
@@ -15,31 +17,6 @@
 *Rhombicosidodecahedron with 62 faces, golden ratio geometry, and dynamic multi-axis rotation*
 
 </div>
-
----
-
-## Star History
-
-<picture>
-  <source
-    media="(prefers-color-scheme: dark)"
-    srcset="
-      https://api.star-history.com/svg?repos=HarleyCoops/KimiK2Manim&type=Date&theme=dark
-    "
-  />
-  <source
-    media="(prefers-color-scheme: light)"
-    srcset="
-      https://api.star-history.com/svg?repos=HarleyCoops/KimiK2Manim&type=Date
-    "
-  />
-  <img
-    alt="Star History Chart"
-    src="https://api.star-history.com/svg?repos=HarleyCoops/KimiK2Manim&type=Date"
-  />
-</picture>
-
----
 
 A standalone Python package for generating Manim animations using the **Kimi K2 thinking model** from Moonshot AI. This package provides agents that build knowledge trees, enrich them with mathematical content and visual specifications, and compose narrative prompts for Manim animation generation.
 
