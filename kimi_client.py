@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import os
+import time
 from typing import Any, Dict, List, Optional, Union
 
 from openai import OpenAI
@@ -23,6 +24,7 @@ try:
         MOONSHOT_BASE_URL,
         THINKING_MODE,
     )
+    from .logger import get_logger
 except ImportError:
     from config import (
         DEFAULT_MAX_TOKENS,
@@ -33,6 +35,7 @@ except ImportError:
         MOONSHOT_BASE_URL,
         THINKING_MODE,
     )
+    from logger import get_logger
 
 
 class KimiClient:
@@ -47,6 +50,7 @@ class KimiClient:
         api_key: Optional[str] = None,
         base_url: Optional[str] = None,
         model: Optional[str] = None,
+        logger=None,
     ):
         """
         Initialize Kimi K2 client.
@@ -55,6 +59,7 @@ class KimiClient:
             api_key: Moonshot API key (defaults to MOONSHOT_API_KEY env var)
             base_url: API base URL (defaults to Moonshot endpoint)
             model: Model name (defaults to KIMI_K2_MODEL)
+            logger: Logger instance (defaults to global logger)
         """
         self.api_key = api_key or MOONSHOT_API_KEY
         if not self.api_key:
@@ -68,6 +73,7 @@ class KimiClient:
 
         self.base_url = base_url or MOONSHOT_BASE_URL
         self.model = model or KIMI_K2_MODEL
+        self.logger = logger or get_logger()
 
         # Initialize OpenAI client with Moonshot endpoint
         # The OpenAI client automatically adds "Bearer " prefix to the API key
@@ -134,25 +140,37 @@ class KimiClient:
             if tool_choice:
                 params["tool_choice"] = tool_choice
 
-        # Log API call details
-        print(f"\n[API CALL] Making request to {self.model}")
-        print(f"  Messages: {len(api_messages)} message(s)")
+        # Prepare logging details
+        details = {
+            "Messages": f"{len(api_messages)} message(s)",
+            "Max tokens": str(max_tokens),
+            "Temperature": str(temperature),
+        }
         if system:
-            print(f"  System prompt: {system[:100]}...")
-        print(f"  User message: {messages[0]['content'][:150]}...")
-        print(f"  Max tokens: {max_tokens}, Temperature: {temperature}")
+            details["System prompt"] = f"{system[:100]}..."
+        if messages:
+            details["User message"] = f"{messages[0]['content'][:150]}..."
         if tools:
-            print(f"  Tools: {len(tools)} tool(s) available")
-        print(f"  Tool choice: {tool_choice}")
+            details["Tools"] = f"{len(tools)} tool(s) available"
+        if tool_choice:
+            details["Tool choice"] = str(tool_choice)
         
-        # Make API call
+        # Make API call with logging
+        call_info = {}
         try:
-            response = self.client.chat.completions.create(**params)
-            print(f"[API CALL] Request successful")
+            with self.logger.api_call(self.model, details=details, show_spinner=True) as call_info:
+                response = self.client.chat.completions.create(**params)
+                
+                # Convert response to get usage info
+                formatted = self._format_response(response)
+                usage = formatted.get("usage")
+                if usage:
+                    call_info['usage'] = usage
         except Exception as e:
             # Provide more helpful error message for authentication issues
             error_msg = str(e)
             if "401" in error_msg or "Invalid Authentication" in error_msg or "AuthenticationError" in str(type(e)):
+                self.logger.error("Authentication failed (401)")
                 raise ValueError(
                     f"Authentication failed (401). Please verify:\n"
                     f"1. Your MOONSHOT_API_KEY is valid and active at https://platform.moonshot.ai/\n"
@@ -168,24 +186,23 @@ class KimiClient:
         if stream:
             return response  # Return stream object as-is
         else:
+            # Response already formatted above for usage info
             formatted = self._format_response(response)
-            # Log response details
-            print(f"[API RESPONSE] Received response")
-            if formatted.get("usage"):
-                usage = formatted["usage"]
-                print(f"  Tokens used: {usage.get('prompt_tokens', 0)} prompt + {usage.get('completion_tokens', 0)} completion = {usage.get('total_tokens', 0)} total")
+            
             text_content = self.get_text_content(formatted)
-            if text_content:
-                print(f"  Text content length: {len(text_content)} chars")
-                print(f"  Text preview: {text_content[:200]}...")
+            tool_calls = None
             if self.has_tool_calls(formatted):
                 tool_calls = self.get_tool_calls(formatted)
-                print(f"  Tool calls: {len(tool_calls)} call(s)")
-                for i, tc in enumerate(tool_calls):
-                    func_name = tc.get("function", {}).get("name", "unknown")
-                    args_preview = tc.get("function", {}).get("arguments", "")[:150]
-                    print(f"    Tool {i+1}: {func_name}")
-                    print(f"      Arguments preview: {args_preview}...")
+            
+            # Add debug info if verbose
+            if self.logger.verbose:
+                if text_content:
+                    self.logger.debug(f"Response length: {len(text_content)} chars, preview: {text_content[:100]}...")
+                if tool_calls:
+                    for i, tc in enumerate(tool_calls):
+                        func_name = tc.get("function", {}).get("name", "unknown")
+                        self.logger.debug(f"Tool call {i+1}: {func_name}")
+            
             return formatted
 
     def _format_response(self, response) -> Dict[str, Any]:

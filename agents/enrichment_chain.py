@@ -24,8 +24,10 @@ from typing import Any, Dict, List, Optional
 # Import Kimi K2 components - handle both package and standalone
 try:
     from ..kimi_client import KimiClient, get_kimi_client
+    from ..logger import get_logger
 except ImportError:
     from kimi_client import KimiClient, get_kimi_client
+    from logger import get_logger
 
 from .prerequisite_explorer_kimi import KnowledgeNode
 
@@ -156,8 +158,9 @@ class MathematicalContent:
 class KimiMathematicalEnricher:
     """Populate equations/definitions for each knowledge node via Kimi K2."""
 
-    def __init__(self, client: Optional[KimiClient] = None):
+    def __init__(self, client: Optional[KimiClient] = None, logger=None):
         self.client = client or get_kimi_client()
+        self.logger = logger or get_logger()
         self.cache: Dict[str, MathematicalContent] = {}
 
     async def enrich_tree(self, root: KnowledgeNode) -> KnowledgeNode:
@@ -196,7 +199,7 @@ class KimiMathematicalEnricher:
             "and any illustrative examples/typical values that help teach the idea."
         )
 
-        print(f"\n[MATH ENRICHMENT] Enriching: '{node.concept}' (depth {node.depth})")
+        self.logger.info(f"Enriching: '{node.concept}' (depth {node.depth})", prefix="MATH")
         response = self.client.chat_completion(
             messages=[{"role": "user", "content": user_prompt}],
             system=system_prompt,
@@ -210,11 +213,11 @@ class KimiMathematicalEnricher:
         if payload is None:
             payload = _parse_json_fallback(self.client.get_text_content(response)) or {}
 
-        print(f"[MATH ENRICHMENT] Extracted payload for '{node.concept}'")
-        print(f"  Equations: {len(payload.get('equations', []))} equation(s)")
-        print(f"  Definitions: {len(payload.get('definitions', {}))} definition(s)")
-        if payload.get('equations'):
-            print(f"  Equation preview: {payload['equations'][0][:100]}...")
+        eq_count = len(payload.get('equations', []))
+        def_count = len(payload.get('definitions', {}))
+        self.logger.success(f"Extracted payload for '{node.concept}': {eq_count} equations, {def_count} definitions")
+        if self.logger.verbose and payload.get('equations'):
+            self.logger.debug(f"Equation preview: {payload['equations'][0][:100]}...")
         
         math_content = MathematicalContent.from_payload(payload)
         self.cache[node.concept] = math_content
@@ -335,8 +338,9 @@ class VisualSpec:
 class KimiVisualDesigner:
     """Design Manim visual specifications using Kimi tool calls."""
 
-    def __init__(self, client: Optional[KimiClient] = None):
+    def __init__(self, client: Optional[KimiClient] = None, logger=None):
         self.client = client or get_kimi_client()
+        self.logger = logger or get_logger()
         self.cache: Dict[str, VisualSpec] = {}
 
     async def design_tree(self, root: KnowledgeNode) -> KnowledgeNode:
@@ -386,7 +390,7 @@ class KimiVisualDesigner:
             "Estimate duration in seconds."
         )
 
-        print(f"\n[VISUAL DESIGN] Designing visuals for: '{node.concept}'")
+        self.logger.info(f"Designing visuals for: '{node.concept}'", prefix="VISUAL")
         response = self.client.chat_completion(
             messages=[{"role": "user", "content": user_prompt}],
             system=system_prompt,
@@ -400,11 +404,15 @@ class KimiVisualDesigner:
         if payload is None:
             payload = _parse_json_fallback(self.client.get_text_content(response)) or {}
 
-        print(f"[VISUAL DESIGN] Extracted visual spec for '{node.concept}'")
-        print(f"  Visual description: {payload.get('visual_description', '')[:150]}...")
-        print(f"  Color scheme: {payload.get('color_scheme', 'N/A')}")
-        print(f"  Animation: {payload.get('animation_description', 'N/A')[:100]}...")
-        print(f"  Duration: {payload.get('duration', 'N/A')}s")
+        visual_desc = payload.get('visual_description', '')[:150]
+        color_scheme = payload.get('color_scheme', 'N/A')
+        animation = payload.get('animation_description', 'N/A')[:100]
+        duration = payload.get('duration', 'N/A')
+        self.logger.success(f"Extracted visual spec for '{node.concept}': {duration}s duration")
+        if self.logger.verbose:
+            self.logger.debug(f"  Visual: {visual_desc}...")
+            self.logger.debug(f"  Colors: {color_scheme}")
+            self.logger.debug(f"  Animation: {animation}...")
         
         visual_spec = VisualSpec.from_payload(node.concept, payload)
 
@@ -484,8 +492,9 @@ class Narrative:
 class KimiNarrativeComposer:
     """Compose the long-form animation narrative using Kimi tool calling."""
 
-    def __init__(self, client: Optional[KimiClient] = None):
+    def __init__(self, client: Optional[KimiClient] = None, logger=None):
         self.client = client or get_kimi_client()
+        self.logger = logger or get_logger()
 
     async def compose_async(self, root: KnowledgeNode) -> Narrative:
         ordered_nodes = self._topological_order(root)
@@ -516,9 +525,8 @@ class KimiNarrativeComposer:
             "Return your work by calling the tool."
         )
 
-        print(f"\n[NARRATIVE COMPOSITION] Composing narrative for '{root.concept}'")
-        print(f"  Concepts in order: {len(ordered_nodes)} node(s)")
-        print(f"  Estimated total duration: {total_duration}s")
+        self.logger.info(f"Composing narrative for '{root.concept}'", prefix="NARRATIVE")
+        self.logger.debug(f"  Concepts in order: {len(ordered_nodes)} node(s), estimated duration: {total_duration}s")
         response = self.client.chat_completion(
             messages=[{"role": "user", "content": user_prompt}],
             system=system_prompt,
@@ -537,11 +545,9 @@ class KimiNarrativeComposer:
         scene_count = payload.get("scene_count", len(ordered_nodes))
         concept_order = payload.get("concept_order", concept_order)
 
-        print(f"[NARRATIVE COMPOSITION] Narrative composed")
-        print(f"  Length: {len(verbose_prompt)} characters")
-        print(f"  Total duration: {total_duration}s")
-        print(f"  Scene count: {scene_count}")
-        print(f"  Preview: {verbose_prompt[:200]}...")
+        self.logger.success(f"Narrative composed: {len(verbose_prompt)} chars, {total_duration}s total, {scene_count} scenes")
+        if self.logger.verbose:
+            self.logger.debug(f"Preview: {verbose_prompt[:200]}...")
 
         root.narrative = verbose_prompt
 
@@ -609,16 +615,24 @@ class EnrichmentResult:
 class KimiEnrichmentPipeline:
     """Run mathematical enrichment, visual design, and narrative composition."""
 
-    def __init__(self, client: Optional[KimiClient] = None):
+    def __init__(self, client: Optional[KimiClient] = None, logger=None):
+        logger = logger or get_logger()
         client = client or get_kimi_client()
-        self.math = KimiMathematicalEnricher(client=client)
-        self.visual = KimiVisualDesigner(client=client)
-        self.narrative = KimiNarrativeComposer(client=client)
+        self.logger = logger
+        self.math = KimiMathematicalEnricher(client=client, logger=logger)
+        self.visual = KimiVisualDesigner(client=client, logger=logger)
+        self.narrative = KimiNarrativeComposer(client=client, logger=logger)
 
     async def run_async(self, root: KnowledgeNode) -> EnrichmentResult:
+        self.logger.stage("Mathematical Enrichment", 1, 3)
         await self.math.enrich_tree(root)
+        
+        self.logger.stage("Visual Design", 2, 3)
         await self.visual.design_tree(root)
+        
+        self.logger.stage("Narrative Composition", 3, 3)
         narrative = await self.narrative.compose_async(root)
+        
         return EnrichmentResult(enriched_tree=root, narrative=narrative)
 
     def run(self, root: KnowledgeNode) -> EnrichmentResult:

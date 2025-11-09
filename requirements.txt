@@ -1,6 +1,7 @@
 # Core dependencies for KimiK2Manim
 openai>=1.0.0  # OpenAI-compatible API client for Moonshot AI
 python-dotenv>=1.0.0  # For environment variable management
+kosong>=0.1.0  # LLM abstraction layer for AI agents (official Moonshot protocol)
 
 # Optional but recommended for development
 pytest>=7.0.0  # For testing

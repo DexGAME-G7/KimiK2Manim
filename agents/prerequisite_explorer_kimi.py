@@ -20,10 +20,12 @@ try:
     from ..kimi_client import KimiClient, get_kimi_client
     from ..tool_adapter import ToolAdapter
     from ..config import TOOLS_ENABLED, FALLBACK_TO_VERBOSE
+    from ..logger import get_logger
 except ImportError:
     from kimi_client import KimiClient, get_kimi_client
     from tool_adapter import ToolAdapter
     from config import TOOLS_ENABLED, FALLBACK_TO_VERBOSE
+    from logger import get_logger
 
 # No external tools dependency - standalone package
 ALL_TOOLS = []
@@ -58,9 +60,25 @@ class KnowledgeNode:
 
     def print_tree(self, indent: int = 0):
         """Pretty print the knowledge tree"""
+        import platform
+        import sys
+        
+        # Use ASCII-safe characters on Windows
+        is_windows = platform.system() == 'Windows'
+        use_unicode = not is_windows or (sys.stdout.encoding and 'utf' in sys.stdout.encoding.lower())
+        
+        if use_unicode:
+            branch = "├─"
+        else:
+            branch = "+-"
+        
         prefix = "  " * indent
         foundation_mark = " [FOUNDATION]" if self.is_foundation else ""
-        print(f"{prefix}├─ {self.concept} (depth {self.depth}){foundation_mark}")
+        try:
+            print(f"{prefix}{branch} {self.concept} (depth {self.depth}){foundation_mark}")
+        except UnicodeEncodeError:
+            # Fallback to ASCII
+            print(f"{prefix}+- {self.concept} (depth {self.depth}){foundation_mark}")
         for prereq in self.prerequisites:
             prereq.print_tree(indent + 1)
 
@@ -75,19 +93,21 @@ class KimiPrerequisiteExplorer:
     - Same interface as EnhancedPrerequisiteExplorer for compatibility
     """
 
-    def __init__(self, max_depth: int = 4, use_tools: bool = True):
+    def __init__(self, max_depth: int = 4, use_tools: bool = True, logger=None):
         """
         Initialize Kimi prerequisite explorer.
 
         Args:
             max_depth: Maximum depth for prerequisite exploration
             use_tools: Whether to attempt using tools (may fallback to verbose)
+            logger: Logger instance (defaults to global logger)
         """
         self.max_depth = max_depth
         self.use_tools = use_tools and TOOLS_ENABLED
         self.cache: Dict[str, List[str]] = {}
         self.client = get_kimi_client()
         self.tool_adapter = ToolAdapter()
+        self.logger = logger or get_logger()
 
         # Prepare tools for Kimi (convert to OpenAI format)
         self.tools = self._prepare_tools() if self.use_tools else None
@@ -133,12 +153,13 @@ class KimiPrerequisiteExplorer:
             KnowledgeNode representing the concept and its prerequisites
         """
         if verbose:
-            print(f"{'  ' * depth}Exploring: {concept} (depth {depth})")
+            indent = "  " * depth
+            self.logger.info(f"{indent}Exploring: {concept} (depth {depth})", prefix="EXPLORE")
 
         # Check if we've hit max depth or found a foundation
         if depth >= self.max_depth:
             if verbose:
-                print(f"{'  ' * depth}  -> Max depth reached")
+                self.logger.debug(f"{'  ' * depth}  -> Max depth reached")
             return KnowledgeNode(
                 concept=concept,
                 depth=depth,
@@ -150,7 +171,7 @@ class KimiPrerequisiteExplorer:
         is_foundation = await self._is_foundation_async(concept)
         if is_foundation:
             if verbose:
-                print(f"{'  ' * depth}  -> Foundation concept")
+                self.logger.success(f"{'  ' * depth}  -> Foundation concept")
             return KnowledgeNode(
                 concept=concept,
                 depth=depth,
@@ -222,7 +243,7 @@ Answer with ONLY "yes" or "no"."""
         # Check in-memory cache first
         if concept in self.cache:
             if verbose:
-                print(f"  -> Using in-memory cache for {concept}")
+                self.logger.debug(f"  -> Using in-memory cache for {concept}")
             return self.cache[concept]
 
         # Prepare system prompt
@@ -263,7 +284,7 @@ Return format: ["concept1", "concept2", "concept3"]'''
                     # In a full implementation, we'd execute the tools
                     tool_calls = self.client.get_tool_calls(response)
                     if verbose:
-                        print(f"  -> Tool calls detected: {len(tool_calls)}")
+                        self.logger.debug(f"  -> Tool calls detected: {len(tool_calls)}")
                     # For now, fall through to get text response
                     # In production, execute tools and continue conversation
 
@@ -271,7 +292,7 @@ Return format: ["concept1", "concept2", "concept3"]'''
                 response_text = self.client.get_text_content(response)
             except Exception as e:
                 if verbose:
-                    print(f"  -> Tool call failed, using verbose instructions: {e}")
+                    self.logger.warning(f"  -> Tool call failed, using verbose instructions: {e}")
                 # Fallback to verbose instructions
                 response_text = await self._get_prerequisites_verbose(
                     concept, system_prompt, user_prompt
