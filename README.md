@@ -8,6 +8,16 @@
 
 A standalone Python package for generating Manim animations using the **Kimi K2 thinking model** from Moonshot AI. This package provides agents that build knowledge trees, enrich them with mathematical content and visual specifications, and compose narrative prompts for Manim animation generation.
 
+<div align="center">
+
+<video src="https://raw.githubusercontent.com/HarleyCoops/KimiK2Manim/main/media/videos/render_rhombicosidodecahedron/480p15/partial_movie_files/ArtisticRhombicosidodecahedron/4080640546_2964692131_4103994035.mp4" controls autoplay loop muted width="600">
+  Your browser does not support the video tag.
+</video>
+
+*Example: Rhombicosidodecahedron animation with 62 faces, golden ratio geometry, and dynamic multi-axis rotation*
+
+</div>
+
 ## Overview
 
 KimiK2Manim uses the Kimi K2 model (via Moonshot AI's OpenAI-compatible API) to:
