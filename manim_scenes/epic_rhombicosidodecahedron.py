@@ -9,10 +9,10 @@ class EpicRhombicosidodecahedron(ThreeDScene):
     """
     Epic Rhombicosidodecahedron animation enhanced with KimiK2 pipeline.
     
-    Visual Design: A large rhombicosidodecahedron rotating in 3D space, showing its 62 faces clearly - triangular faces...
-    Color Scheme: Gold for triangular faces, silver for square faces, deep blue for pentagonal faces, white for edges and equations, with subtle glow effects
-    Animation: The rhombicosidodecahedron slowly rotates on multiple axes while individual face types pulse with subtle light - triangles glow brighter gold, squares shimmer silver, and pentagons pulse deep blue. The equations fade in sequentially as the corresponding geometric features are highlighted. Camera gently orbits around the polyhedron to show all angles.
-    Camera: Smooth orbital camera movement around the rotating polyhedron, occasionally zooming in to highlight specific face configurations
+    Visual Design: A large rhombicosidodecahedron rotating in 3D space, showing its 62 faces clearly: 20 triangular fac...
+    Color Scheme: Bright blue for triangular faces, golden yellow for square faces, rich red for pentagonal faces, white edges, with equations in clean black text on semi-transparent white background panels
+    Animation: The rhombicosidodecahedron rotates slowly and smoothly around multiple axes, allowing viewers to appreciate its complex geometry from all angles. Individual face groups (triangles, squares, pentagons) briefly highlight with a gentle pulsing glow effect. The equations fade in sequentially around the rotating polyhedron, with each equation appearing as its corresponding concept becomes visually apparent.
+    Camera: Camera slowly orbits around the polyhedron while maintaining it centered in frame, occasionally zooming in slightly to emphasize the intricate arrangement of faces, then pulling back to show the complete structure
     """
 
     def construct(self):
@@ -159,7 +159,7 @@ class EpicRhombicosidodecahedron(ThreeDScene):
             return group
 
         # Enhanced colors based on KimiK2 recommendations
-        # Apply color scheme: Gold for triangular faces, silver for square faces, deep blue for pentagonal faces, white for edges and equations, with subtle glow effects
+        # Apply color scheme: Bright blue for triangular faces, golden yellow for square faces, rich red for pentagonal faces, white edges, with equations in clean black text on semi-transparent white background panels
         pentagons = create_edges(pentagon_edges, GOLD, 3.0, glow=True)
         squares = create_edges(square_edges, BLUE, 2.5, glow=True)
         triangles = create_edges(triangle_edges, RED, 2.0, glow=True)
@@ -195,7 +195,7 @@ class EpicRhombicosidodecahedron(ThreeDScene):
         polyhedron.scale(2.2).move_to(ORIGIN)
 
         # Epic camera setup with dynamic movement
-        # Camera movement: Smooth orbital camera movement around the rotating polyhedron, occasionally zooming in to highlight specific face configurations
+        # Camera movement: Camera slowly orbits around the polyhedron while maintaining it centered in frame, occasionally zooming in slightly to emphasize the intricate arrangement of faces, then pulling back to show the complete structure
         self.set_camera_orientation(
             phi=70 * DEGREES,
             theta=-45 * DEGREES,
@@ -247,7 +247,7 @@ class EpicRhombicosidodecahedron(ThreeDScene):
             title_group.add(title)
 
         # Animation sequence - Epic entrance
-        # Animation: The rhombicosidodecahedron slowly rotates on multiple axes while individual face types pulse with subtle light - triangles glow brighter gold, squares shimmer silver, and pentagons pulse deep blue. The equations fade in sequentially as the corresponding geometric features are highlighted. Camera gently orbits around the polyhedron to show all angles.
+        # Animation: The rhombicosidodecahedron rotates slowly and smoothly around multiple axes, allowing viewers to appreciate its complex geometry from all angles. Individual face groups (triangles, squares, pentagons) briefly highlight with a gentle pulsing glow effect. The equations fade in sequentially around the rotating polyhedron, with each equation appearing as its corresponding concept becomes visually apparent.
         self.add(bg, stars)
         
         # Fade in stars
