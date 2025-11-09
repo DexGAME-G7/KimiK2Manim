@@ -6,7 +6,7 @@
   <img alt="GitHub stars" src="https://img.shields.io/github/stars/HarleyCoops/KimiK2Manim?style=for-the-badge&logo=github&label=Star&color=gold">
 </a>
 
-![Slow-Fast Network Architecture](media/videos/SlowFastNetwork/480p15/SlowFastNetworkPhD.gif)
+![Slow-Fast Network Architecture](media/videos/SlowFastNetwork/480p15/SlowFastNetwork.gif)
 
 *Unnormalized Linear Transformers via [Jürgen Schmidhuber](https://people.idsia.ch/~juergen/1991-unnormalized-linear-transformer.html) and [@SchmidhuberAI](https://twitter.com/SchmidhuberAI) - The 1991 ULTRA (Unnormalized Linear Transformer) demonstrating how a SLOW hypernetwork programs FAST task-specific network weights through additive outer products of KEY and VALUE vectors.*
 
