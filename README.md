@@ -10,11 +10,9 @@ A standalone Python package for generating Manim animations using the **Kimi K2 
 
 <div align="center">
 
-<video src="https://raw.githubusercontent.com/HarleyCoops/KimiK2Manim/main/media/videos/render_rhombicosidodecahedron/480p15/partial_movie_files/ArtisticRhombicosidodecahedron/4080640546_2964692131_4103994035.mp4" controls autoplay loop muted width="600">
-  Your browser does not support the video tag.
-</video>
+![Rhombicosidodecahedron Animation](media/videos/render_rhombicosidodecahedron/480p15/partial_movie_files/ArtisticRhombicosidodecahedron/rhombicosidodecahedron_preview.gif)
 
-*Example: Rhombicosidodecahedron animation with 62 faces, golden ratio geometry, and dynamic multi-axis rotation*
+*Rhombicosidodecahedron with 62 faces, golden ratio geometry, and dynamic multi-axis rotation*
 
 </div>
 
