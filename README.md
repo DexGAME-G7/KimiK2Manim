@@ -1,13 +1,5 @@
 # KimiK2Manim
 
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=HarleyCoops/KimiK2Manim&type=Date)](https://star-history.com/#HarleyCoops/KimiK2Manim&Date)
-
----
-
-A standalone Python package for generating Manim animations using the **Kimi K2 thinking model** from Moonshot AI. This package provides agents that build knowledge trees, enrich them with mathematical content and visual specifications, and compose narrative prompts for Manim animation generation.
-
 <div align="center">
 
 ![Rhombicosidodecahedron Animation](media/videos/render_rhombicosidodecahedron/480p15/partial_movie_files/ArtisticRhombicosidodecahedron/rhombicosidodecahedron_preview.gif)
@@ -15,6 +7,16 @@ A standalone Python package for generating Manim animations using the **Kimi K2 
 *Rhombicosidodecahedron with 62 faces, golden ratio geometry, and dynamic multi-axis rotation*
 
 </div>
+
+---
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=HarleyCoops/KimiK2Manim&type=Date)](https://star-history.com/#HarleyCoops/KimiK2Manim&Date)
+
+---
+
+A standalone Python package for generating Manim animations using the **Kimi K2 thinking model** from Moonshot AI. This package provides agents that build knowledge trees, enrich them with mathematical content and visual specifications, and compose narrative prompts for Manim animation generation.
 
 ## Overview
 
