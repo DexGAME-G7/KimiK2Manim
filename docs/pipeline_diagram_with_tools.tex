@@ -1,0 +1,179 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{positioning, shapes.geometric, arrows.meta}
+
+\begin{document}
+\begin{tikzpicture}[
+    node distance=1.2cm,
+    agent/.style={rectangle, rounded corners, minimum width=3.5cm, minimum height=1.8cm, 
+                  text centered, draw=black, fill=blue!25, font=\small\bfseries, align=center},
+    tool/.style={ellipse, minimum width=2.5cm, minimum height=1cm,
+                 text centered, draw=black, fill=purple!20, font=\tiny, align=center},
+    data/.style={rectangle, rounded corners, minimum width=3.5cm, minimum height=1.5cm,
+                 text centered, draw=black, fill=green!20, font=\tiny, align=left},
+    api/.style={cylinder, shape border rotate=90, minimum width=1.5cm, minimum height=1cm,
+                text centered, draw=black, fill=orange!30, font=\tiny},
+    arrow/.style={->, >=stealth, thick, black},
+    toolarrow/.style={->, >=stealth, thick, purple, dashed}
+]
+
+% User Input
+\node[agent, fill=purple!25] (input) at (0,0) {
+    User Prompt\\
+    "Minimal Surfaces:\\ 
+    Mathematical Soap Films"
+};
+
+% Stage 1: Prerequisite Explorer
+\node[agent, fill=blue!30, below=of input] (explorer) {
+    1. PrerequisiteExplorer\\
+    Builds Knowledge Tree\\
+    (recursive)
+};
+
+% Tool for Explorer
+\node[tool, right=of explorer, xshift=1cm] (tool1) {
+    identify\_prerequisites\\
+    tool
+};
+
+% API Call
+\node[api, right=of tool1, xshift=0.5cm] (api1) {
+    Kimi K2\\
+    API
+};
+
+% Tree output
+\node[data, fill=green!15, below=of explorer] (tree1) {
+    KnowledgeNode Tree\\
+    • concept\\
+    • depth\\
+    • prerequisites[]
+};
+
+% Stage 2: Mathematical Enricher
+\node[agent, fill=green!30, below=of tree1] (math) {
+    2. MathematicalEnricher\\
+    Adds Math Content\\
+    (recursive)
+};
+
+% Tool for Math
+\node[tool, right=of math, xshift=1cm] (tool2) {
+    write\_mathematical\_content\\
+    tool
+};
+
+% API Call
+\node[api, right=of tool2, xshift=0.5cm] (api2) {
+    Kimi K2\\
+    API
+};
+
+% Math-enriched tree
+\node[data, fill=green!20, below=of math] (tree2) {
+    Math-Enriched Tree\\
+    + equations[]\\
+    + definitions\{\}\\
+    + examples[]
+};
+
+% Stage 3: Visual Designer
+\node[agent, fill=yellow!30, below=of tree2] (visual) {
+    3. VisualDesigner\\
+    Designs Visual Specs\\
+    (recursive)
+};
+
+% Tool for Visual
+\node[tool, right=of visual, xshift=1cm] (tool3) {
+    design\_visual\_plan\\
+    tool
+};
+
+% API Call
+\node[api, right=of tool3, xshift=0.5cm] (api3) {
+    Kimi K2\\
+    API
+};
+
+% Visual-enriched tree
+\node[data, fill=yellow!20, below=of visual] (tree3) {
+    Visual-Enriched Tree\\
+    + visual\_description\\
+    + color\_scheme\\
+    + camera\_movement
+};
+
+% Stage 4: Narrative Composer
+\node[agent, fill=orange!30, below=of tree3] (narrative) {
+    4. NarrativeComposer\\
+    Creates Verbose Prompt\\
+    (2000+ words)
+};
+
+% Tool for Narrative
+\node[tool, right=of narrative, xshift=1cm] (tool4) {
+    compose\_narrative\\
+    tool
+};
+
+% API Call
+\node[api, right=of tool4, xshift=0.5cm] (api4) {
+    Kimi K2\\
+    API
+};
+
+% Final enriched tree
+\node[data, fill=orange!20, below=of narrative] (tree4) {
+    Final Enriched Tree\\
+    + narrative\\
+    + verbose\_prompt\\
+    Complete for Manim
+};
+
+% Final Output
+\node[agent, fill=red!25, below=of tree4] (manim) {
+    Manim ThreeDScene\\
+    minimal\_surfaces\_scene.py\\
+    Ready to Render
+};
+
+% Main flow arrows
+\draw[arrow] (input) -- (explorer);
+\draw[arrow] (explorer) -- (tree1);
+\draw[arrow] (tree1) -- (math);
+\draw[arrow] (math) -- (tree2);
+\draw[arrow] (tree2) -- (visual);
+\draw[arrow] (visual) -- (tree3);
+\draw[arrow] (tree3) -- (narrative);
+\draw[arrow] (narrative) -- (tree4);
+\draw[arrow, red, very thick] (tree4) -- (manim);
+
+% Tool calling arrows
+\draw[toolarrow] (explorer) -- (tool1);
+\draw[toolarrow] (tool1) -- (api1);
+\draw[toolarrow] (math) -- (tool2);
+\draw[toolarrow] (tool2) -- (api2);
+\draw[toolarrow] (visual) -- (tool3);
+\draw[toolarrow] (tool3) -- (api3);
+\draw[toolarrow] (narrative) -- (tool4);
+\draw[toolarrow] (tool4) -- (api4);
+
+% Return arrows (tool responses)
+\draw[toolarrow, <-] (api1) -- (tool1);
+\draw[toolarrow, <-] (api2) -- (tool2);
+\draw[toolarrow, <-] (api3) -- (tool3);
+\draw[toolarrow, <-] (api4) -- (tool4);
+
+% Labels
+\node[font=\tiny, above right=0.1cm of explorer] {concept};
+\node[font=\tiny\itshape, right=0.1cm of tool1, text=purple] {tool call};
+\node[font=\tiny\itshape, right=0.1cm of tool2, text=purple] {tool call};
+\node[font=\tiny\itshape, right=0.1cm of tool3, text=purple] {tool call};
+\node[font=\tiny\itshape, right=0.1cm of tool4, text=purple] {tool call};
+\node[font=\tiny\bfseries, right=0.3cm of manim, text=red] {3D Animation};
+
+\end{tikzpicture}
+\end{document}
+

@@ -7,6 +7,34 @@
 [![Star History Chart](https://api.star-history.com/svg?repos=HarleyCoops/KimiK2Manim&type=date&legend=top-left)](https://www.star-history.com/#HarleyCoops/KimiK2Manim&type=date)
 
 
+## Minimal Surfaces: Mathematical Soap Films in 3D Space
+
+![Minimal Surfaces Animation](media/videos/minimal_surfaces_scene/480p15/MinimalSurfaces3D.gif)
+
+*Translucent 3D minimal surfaces (catenoid, helicoid, Costa, Enneper) visualized as mathematical soap films with zero mean curvature H = 0. Generated using Kimi K2's enhanced "liminal solid" prompt technique.*
+
+### The Liminal Solid Prompt
+
+The **liminal solid prompt** is an enhanced prompting technique that bridges abstract mathematical concepts with concrete 3D visualizations. For minimal surfaces, the prompt emphasizes:
+
+> *"Minimal Surfaces: Mathematical Soap Films in 3D Space. This animation MUST use Manim's ThreeDScene class for full 3D rendering. Focus on visualizing surfaces in three-dimensional space with dynamic camera movements, lighting effects, and artistic presentation. Show surfaces like catenoid, helicoid, Costa surface, and Enneper surface as translucent 3D objects that can be viewed from multiple angles. Emphasize depth, perspective, and immersive 3D experience."*
+
+This prompt technique:
+- **Bridges abstraction**: Connects mathematical theory (mean curvature H = 0) to physical intuition (soap films)
+- **Specifies constraints**: Explicitly requires ThreeDScene for 3D rendering
+- **Guides visualization**: Directs camera movements, lighting, and artistic presentation
+- **Enables tool calling**: Structured format allows agents to extract visual specifications via tool calls
+
+### Agent Pipeline with Tool Calling
+
+The KimiK2Manim pipeline uses **4 sequential agents** that progressively enrich a knowledge tree through structured tool calls:
+
+![Agent Pipeline with Tool Calling](docs/pipeline_diagram_with_tools.png)
+
+*Each agent calls specialized tools (identify_prerequisites, write_mathematical_content, design_visual_plan, compose_narrative) that communicate with the Kimi K2 API to extract structured data. The pipeline transforms a simple concept into a complete 2000+ word narrative with LaTeX equations, visual specifications, and timing details ready for Manim code generation.*
+
+---
+
 
 ![Slow-Fast Network Architecture](media/videos/SlowFastNetwork/480p15/SlowFastNetwork.gif)
 
