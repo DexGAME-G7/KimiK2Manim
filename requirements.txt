@@ -7,3 +7,5 @@ kosong>=0.1.0  # LLM abstraction layer for AI agents (official Moonshot protocol
 pytest>=7.0.0  # For testing
 black>=22.0.0  # For code formatting
 
+e2b-code-interpreter>=0.0.7
+python-dotenv>=1.0.0
