@@ -1,0 +1,7 @@
+Lets first research best in class Manim addins that we can use to reference as 3D surface "skins" that will render in the animation. Then we want to build an explainer of the math of
+
+ a torus cycling through its eigenfunctions...the surface's pure standing-wave modes. An eigenfunction is a mode that, when the surface Laplacian operator acts on it, reproduces itself scaled by a constant...that constant fixes the natural frequency.
+
+Each mode is indexed by two counts: how many oscillations wrap the small tube and how many wrap the big ring. Dark rings are nodes (no motion) and the bright bands between them are antinodes. As the counts rise, nodes crowd together, ridges sharpen, and the torus takes on a pine-cone look.
+
+Lets limit the animation we will construct to 1 minute. Limit the introduction text sequence. You have an image as reference in this folder as well
