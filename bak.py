@@ -129,6 +129,27 @@ class BakSneppenEvolution3D(ThreeDScene):
                 height=bar_height,
                 color=color,
                 resolution=(8, 8)
+            )
+            bar.move_to([x, y, bar_height / 2])
+            
+            # Add index label
+            label = Text(str(i), font_size=16, color=WHITE)
+            label.move_to([x, y, -0.5])
+            
+            # Group elements
+            species_group = VGroup(sphere, bar, label)
+            self.species_objects.append({
+                'sphere': sphere,
+                'bar': bar,
+                'label': label,
+                'group': species_group,
+                'index': i
+            })
+        
+        # Create main VGroup
+        species_vgroup = VGroup(*[obj['group'] for obj in self.species_objects])
+        
+        return species_vgroup, fitness_values
     
     def fitness_to_color(self, fitness):
         """
@@ -214,6 +235,33 @@ class BakSneppenEvolution3D(ThreeDScene):
             # Find species with minimum fitness
             min_idx = fitness_values.index(min(fitness_values))
             neighbors = [
+                (min_idx - 1) % self.NUM_SPECIES,
+                min_idx,
+                (min_idx + 1) % self.NUM_SPECIES
+            ]
+            
+            # Camera control: Zoom in on the first avalanche
+            if iteration == 1:
+                # self.stop_ambient_camera_rotation() # Not started yet
+                target_species = self.species_objects[min_idx]['sphere']
+                self.move_camera(
+                    zoom=1.5,
+                    frame_center=target_species.get_center(),
+                    run_time=1.5
+                )
+            
+            # Camera control: Zoom out after a few iterations
+            if iteration == 3:
+                self.move_camera(
+                    zoom=0.8,
+                    frame_center=ORIGIN,
+                    run_time=1.5
+                )
+                self.begin_ambient_camera_rotation(rate=0.1)
+            
+            # Highlight the avalanche
+            self.highlight_species(min_idx, neighbors)
+            
             # Replace species with new random fitness values
             self.replace_species(min_idx, neighbors, fitness_values)
             
